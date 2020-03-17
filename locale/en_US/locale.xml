@@ -12,7 +12,7 @@
   -->
  
 <locale name="en_US" full_name="U.S. English">
-	<message key="plugins.generic.themeIssues.displayName">Theme Issues</message>
+	<message key="plugins.generic.themeIssues.displayName">Theme Issues plugin</message>
 	<message key="plugins.generic.themeIssues.description">Theme Issues plugin enables editors to tag published theme issues and list them all in an archive page.</message>
   <message key="plugins.generic.themeIssues.title">Theme Issues</message>
 	<message key="plugins.generic.themeIssues.label">This is a theme issue</message>
