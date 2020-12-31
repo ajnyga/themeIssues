@@ -39,17 +39,16 @@ class ThemeIssuesHandler extends Handler {
 		$context = $request->getContext();
 		$plugin = PluginRegistry::getPlugin('generic', 'themeissuesplugin');
 
-		import('classes.core.ServicesContainer');
-		$issueService = ServicesContainer::instance()->get('issue');
 		$params = array(
+			'contextId' => $context->getId(),
 			'orderBy' => 'seq',
 			'orderDirection' => 'ASC',
 			'count' => $count,
 			'offset' => $offset,
 			'isPublished' => true,
 		);
-		$issues = $issueService->getIssues($context->getId(), $params);
-
+		$issues = iterator_to_array(Services::get('issue')->getMany($params));
+		
 		$themeIssues = [];
 		foreach ($issues as $issue) {
 			if ($issue->getData('isThemeIssue')){
