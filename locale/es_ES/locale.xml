@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE locale SYSTEM "../../../../../lib/pkp/dtd/locale.dtd">
+
+<!--
+  * plugins/generic/themeIssues/locale/es_ES/locale.xml
+  *
+  * Copyright (c) 2014-2020 Simon Fraser University
+  * Copyright (c) 2003-2020 John Willinsky
+  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
+  * Localization information: https://forum.pkp.sfu.ca/c/translations
+  * Localization strings.
+  -->
+ 
+<locale name="es_ES" full_name="Español (España)">
+  <message key="plugins.generic.themeIssues.displayName">Módulo Theme Issues</message>
+  <message key="plugins.generic.themeIssues.description">El complemento Theme Issues permite a los editores etiquetar los problemas de los temas y enumerarlos en una página de archivo.</message>
+  <message key="plugins.generic.themeIssues.title">Problemas de los temas</message>
+  <message key="plugins.generic.themeIssues.label">Este es un problema del tema</message>
+</locale>
