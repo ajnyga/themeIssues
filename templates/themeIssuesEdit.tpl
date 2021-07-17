@@ -8,8 +8,9 @@
  * Edit themeIssues 
  *
  *}
+  
 {fbvFormArea id="themeIssues"}
 	{fbvFormSection list="true"}
-		{fbvElement type="checkbox" id="isThemeIssue" label="plugins.generic.themeIssues.label" checked=$isThemeIssue|compare:true}
-	{/fbvFormSection}
-{/fbvFormArea}
+ 		{fbvElement type="checkbox" id="isThemeIssue" label="plugins.generic.themeIssues.label" checked=$isThemeIssue|compare:true}
+ 	{/fbvFormSection}
+  {/fbvFormArea}
