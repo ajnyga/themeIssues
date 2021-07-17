@@ -5,31 +5,43 @@
  * Copyright (c) 2003-2020 John Willinsky
  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
- * Edit themeIssues 
+ * Display themeIssues 
  *
  *}
 {capture assign="pageTitle"}{translate key="plugins.generic.themeIssues.title"}{/capture}
 {include file="frontend/components/header.tpl" pageTitleTranslated=$pageTitle}
 
-<div class="page page_issue_archive">
-	{include file="frontend/components/breadcrumbs.tpl" currentTitle=$pageTitle}
-	<h1>
-		{$pageTitle|escape}
-	</h1>
+<div class="container page-archives">
+
+	<div class="page-header page-archives-header">
+		<h1>{$pageTitle|escape}</h1>
+	</div>
 
 	{* No issues have been published *}
 	{if empty($issues)}
-		<p>{translate key="current.noCurrentIssueDesc"}</p>
+		<div class="page-header page-issue-header">
+			{include file="frontend/components/notification.tpl" messageKey="current.noCurrentIssueDesc"}
+		</div>
 
-	{* List issues *}
+{* List issues *}
 	{else}
-		<ul class="issues_archive">
-			{foreach from=$issues item="issue"}
-				<li>
-					{include file="frontend/objects/issue_summary.tpl"}
-				</li>
-			{/foreach}
-		</ul>
+		{foreach from=$issues item="issue" key="i"}
+			{if $i % 4 == 0 && $i > 0}
+				</div>
+				{assign var="open" value=false}
+			{/if}
+			{if $i % 4 == 0}
+				<div class="row justify-content-around">
+				{assign var="open" value=true}
+			{/if}
+			<div class="col-md-3 col-lg-2">
+				{include file="frontend/objects/issue_summary.tpl" heading="h2"}
+			</div>
+		{/foreach}
+		{if $open}
+			</div>{* Close an open row *}
+		{/if}
+
 	{/if}
 </div>
 
