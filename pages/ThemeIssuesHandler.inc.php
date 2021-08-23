@@ -43,8 +43,8 @@ class ThemeIssuesHandler extends Handler {
 			'contextId' => $context->getId(),
 			'orderBy' => 'seq',
 			'orderDirection' => 'ASC',
-			'count' => $count,
-			'offset' => $offset,
+			/** 'count' => $count,
+			* 'offset' => $offset, */
 			'isPublished' => true,
 		);
 		$issues = iterator_to_array(Services::get('issue')->getMany($params));
