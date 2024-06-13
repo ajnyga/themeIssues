@@ -17,6 +17,6 @@
  */
 require_once('ThemeIssuesPlugin.inc.php');
 
-return new ThemeIssuesPlugin();
+return new \APP\plugins\generic\themeIssues\ThemeIssuesPlugin();
 
 ?>
