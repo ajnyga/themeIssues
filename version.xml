@@ -13,8 +13,8 @@
 <version>
 	<application>themeIssues</application>
 	<type>plugins.generic</type>
-	<release>1.0.0.0</release>
-	<date>2020-01-23</date>
+	<release>1.1.0.0</release>
+	<date>2024-06-13</date>
 	<lazy-load>1</lazy-load>
 	<class>ThemeIssuesPlugin</class>
 </version>
