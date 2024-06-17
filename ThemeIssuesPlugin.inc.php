@@ -1,21 +1,29 @@
 <?php
 
 /**
- * @file plugins/generic/themeIssues/ThemeIssuesPlugin.inc.php
+ * @file plugins/generic/themeIssues/themeIssuesPlugin.inc.php
  *
  * Copyright (c) 2014-2020 Simon Fraser University
  * Copyright (c) 2003-2020 John Willinsky
  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
- * @class ThemeIssuesPlugin
+ * @class themeIssuesPlugin
  * @ingroup plugins_generic_themeIssues
  *
- * @brief ThemeIssues plugin class
+ * @brief themeIssues plugin class
  */
 
-import('lib.pkp.classes.plugins.GenericPlugin');
+namespace APP\plugins\generic\themeIssues;
 
-class ThemeIssuesPlugin extends GenericPlugin {
+use PKP\plugins\GenericPlugin;
+use PKP\plugins\Hook;
+use PKP\config\Config;
+use APP\core\Application;
+use PKP\i18n\Locale;
+use PKP\db\DAORegistry;
+use APP\facades\Repo;
+
+class themeIssuesPlugin extends GenericPlugin {
 
 	/**
 	 * Called as a plugin is registered to the registry
@@ -27,14 +35,14 @@ class ThemeIssuesPlugin extends GenericPlugin {
 		$success = parent::register($category, $path);
 		if ($success && $this->getEnabled()) {
 
-			HookRegistry::register('LoadHandler', array($this, 'loadPageHandler'));
+			Hook::add('LoadHandler', array($this, 'loadPageHandler'));
 
 			// Handle issue form
-			HookRegistry::register('Templates::Editor::Issues::IssueData::AdditionalMetadata', array($this, 'addIssueFormFields'));
-			HookRegistry::register('issuedao::getAdditionalFieldNames', array($this, 'addIssueDAOFieldNames'));
-			HookRegistry::register('issueform::readuservars', array($this, 'readIssueFormFields'));
-			HookRegistry::register('issueform::initdata', array($this, 'initDataIssueFormFields'));	
-			HookRegistry::register('issueform::execute', array($this, 'executeIssueFormFields'));
+			Hook::add('Templates::Editor::Issues::IssueData::AdditionalMetadata', array($this, 'addIssueFormFields'));
+			Hook::add('issuedao::getAdditionalFieldNames', array($this, 'addIssueDAOFieldNames'));
+		/**	Hook::add('issueform::readuservars', array($this, 'readIssueFormFields')); */
+			Hook::add('issueform::initdata', array($this, 'initDataIssueFormFields'));	
+		/**	Hook::add('issueform::execute', array($this, 'executeIssueFormFields')); */
 		}
 		return $success;
 	}
@@ -58,9 +66,9 @@ class ThemeIssuesPlugin extends GenericPlugin {
 	 */
 	public function loadPageHandler($hookName, $args) {
 		$page = $args[0];
-		if ($this->getEnabled() && $page === 'themeissues') {
-			$this->import('pages/ThemeIssuesHandler');
-			define('HANDLER_CLASS', 'ThemeIssuesHandler');
+		if ($this->getEnabled() && $page === 'themeIssues') {
+			$this->import('pages/themeIssuesHandler');
+			define('HANDLER_CLASS', 'themeIssuesHandler');
 			return true;
 		}
 
@@ -83,26 +91,30 @@ class ThemeIssuesPlugin extends GenericPlugin {
 	public function readIssueFormFields($hookName, $args) {
 		$issueForm =& $args[0];
 		$request = $this->getRequest();
-		$issueForm->setData('isThemeIssue', $request->getUserVar('isThemeIssue'));
+		$issueForm->setData('isthemeIssues', $request->getUserVar('isthemeIssues'));
 	}	
 
 	/**
 	 * Save additional fields in the issue editing form
 	 */
-	public function executeIssueFormFields($hookName, $args) {
-		$issueForm = $args[0];
-		$issue = $args[1];
-		$issue->setData('isThemeIssue', $issueForm->getData('isThemeIssue'));
-		$issueDao = DAORegistry::getDAO('IssueDAO');
-		$issueDao->updateObject($issue);
-	}
+	 
+/**	 
+*	public function executeIssueFormFields($hookName, $args) {
+*		$issueForm = $args[0];
+*		$issue = $args[1];
+*		$issue->setData('isthemeIssues', $issueForm->getData('isthemeIssues'));
+*		$issueDao = DAORegistry::getDAO('IssueDAO');
+*		$issueDao->updateObject($issue);
+*	}
+*/
+
 
 	/**
 	 * Initialize data when form is first loaded
 	 */
 	public function initDataIssueFormFields($hookName, $args) {
 		$issueForm = $args[0];
-		$issueForm->setData('isThemeIssue', $issueForm->issue->getData('isThemeIssue'));
+		$issueForm->setData('isthemeIssues', $issueForm->issue->getData('isthemeIssues'));
 	}
 
 	/**
@@ -110,7 +122,7 @@ class ThemeIssuesPlugin extends GenericPlugin {
 	 */
 	public function addIssueDAOFieldNames($hookName, $args) {
 		$fields =& $args[1];
-		$fields[] = 'isThemeIssue';
+		$fields[] = 'isthemeIssues';
 	}
 
 }

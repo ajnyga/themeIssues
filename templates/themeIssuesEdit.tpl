@@ -9,6 +9,8 @@
  *
  *}
   
+
+{** not edited ever since. Needs upgrade to OJS 3.4... and testing.  *}
 {fbvFormArea id="themeIssues"}
 	{fbvFormSection list="true"}
  		{fbvElement type="checkbox" id="isThemeIssue" label="plugins.generic.themeIssues.label" checked=$isThemeIssue|compare:true}

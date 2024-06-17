@@ -1,21 +1,43 @@
 <?php
 
 /**
- * @file plugins/generic/themeIssues/pages/BrowseBySectionHandler.inc.php
+ * @file plugins/generic/themeIssues/pages/themeIssuesHandler.inc.php
  *
  * Copyright (c) 2014-2020 Simon Fraser University
  * Copyright (c) 2003-2020 John Willinsky
  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
- * @class ThemeIssuesHandler
+ * @class themeIssuesHandler
  * @ingroup plugins_generic_themeIssues
  *
  * @brief Handle reader-facing router requests
  */
 
-import('classes.handler.Handler');
+use APP\core\Application;
+use APP\facades\Repo;
+use APP\file\IssueFileManager;
+use APP\handler\Handler;
+use APP\issue\Collector;
+use APP\issue\IssueAction;
+use APP\issue\IssueGalleyDAO;
+use APP\observers\events\UsageEvent;
+use APP\payment\ojs\OJSCompletedPaymentDAO;
+use APP\payment\ojs\OJSPaymentManager;
+use APP\security\authorization\OjsIssueRequiredPolicy;
+use APP\security\authorization\OjsJournalMustPublishPolicy;
+use APP\template\TemplateManager;
+use PKP\config\Config;
+use PKP\db\DAORegistry;
+use PKP\facades\Locale;
+use PKP\plugins\Hook;
+use PKP\plugins\PluginRegistry;
+use PKP\security\authorization\ContextRequiredPolicy;
+use PKP\security\Validation;
+use PKP\submission\GenreDAO;
+use PKP\submission\PKPSubmission;
 
-class ThemeIssuesHandler extends Handler {
+
+class themeIssuesHandler extends Handler {
 
 	/**
 	 * @copydoc PKPHandler::authorize()
@@ -31,35 +53,34 @@ class ThemeIssuesHandler extends Handler {
 	}
 
 	/**
-	 * View theme issues
+	 * View themeIssues
 	 */
 	public function index($args, $request) {
 		$this->setupTemplate($request);
 		$templateMgr = TemplateManager::getManager($request);
 		$context = $request->getContext();
-		$plugin = PluginRegistry::getPlugin('generic', 'themeissuesplugin');
+		$plugin = PluginRegistry::getPlugin('generic', 'themeIssuesplugin');
 
-		$params = array(
-			'contextId' => $context->getId(),
-			'orderBy' => 'seq',
-			'orderDirection' => 'ASC',
-			/** 'count' => $count,
-			* 'offset' => $offset, */
-			'isPublished' => true,
-		);
-		$issues = iterator_to_array(Services::get('issue')->getMany($params));
 		
+		$collector = Repo::issue()->getCollector()
+            ->filterByContextIds([$context->getId()])
+            ->orderBy(Collector::ORDERBY_SEQUENCE)
+            ->filterByPublished(true);
+		
+		$issues = $collector->getMany()->toArray();
+		
+
 		$themeIssues = [];
 		foreach ($issues as $issue) {
-			if ($issue->getData('isThemeIssue')){
+			if ($issue->getData('isthemeIssues')){
 				$themeIssues[] = $issue;
 			}
 		}
 
-		$templateMgr->assign(array(
-			'issues' => $themeIssues,
-		));
+		  $templateMgr->assign([
+			  'issues' => $themeIssues,
+			  ]);
 
-		return $templateMgr->display($plugin->getTemplateResource('themeIssues.tpl'));
+		$templateMgr->display($plugin->getTemplateResource('themeIssues.tpl'));
 	}
 }
